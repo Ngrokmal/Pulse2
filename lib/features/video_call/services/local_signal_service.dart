@@ -224,23 +224,7 @@ class LocalSignalService extends ChangeNotifier {
     } catch (error) {
       debugPrint('Starting host failed: $error');
       if (run != _run) return;
-      final description = error.toString().toLowerCase();
-      if (description.contains('address already in use') ||
-          description.contains('already in use') ||
-          description.contains('eaddrinuse')) {
-        await _fail(
-          'Port $port is already in use. Choose another port or close '
-          'the other app.',
-        );
-      } else if (description.contains('permission denied') ||
-          description.contains('eacces')) {
-        await _fail(
-          'Android did not allow opening port $port. Try a port above '
-          '1024.',
-        );
-      } else {
-        await _fail('Could not start the host on port $port.');
-      }
+      await _fail(_describeBindText(error.toString(), null, port));
     }
   }
 
@@ -1083,14 +1067,31 @@ class LocalSignalService extends ChangeNotifier {
   }
 
   String _describeBindError(SocketException error, int port) {
-    final code = error.osError?.errorCode;
-    final text = '${error.message} ${error.osError?.message ?? ''} $error'
-        .toLowerCase();
-    if (code == 98 || text.contains('already in use')) {
+    final text = '${error.message} ${error.osError?.message ?? ''} $error';
+    return _describeBindText(text, error.osError?.errorCode, port);
+  }
+
+  /// Turns a bind failure into a message the user can act on.
+  ///
+  /// "Port already in use" has two spellings: the operating system reports
+  /// EADDRINUSE (errno 98 on Android/Linux, "Address already in use"), while
+  /// the Dart VM refuses a second non-shared bind to the same address and
+  /// port inside this process with its own message ("The shared flag to
+  /// bind() needs to be `true` if binding multiple times ...", errno -1).
+  /// Both mean the same thing for the user.
+  String _describeBindText(String rawText, int? code, int port) {
+    final text = rawText.toLowerCase();
+    if (code == 98 ||
+        text.contains('already in use') ||
+        text.contains('eaddrinuse') ||
+        text.contains('binding multiple times') ||
+        text.contains('shared flag')) {
       return 'Port $port is already in use. Choose another port or close '
           'the other app.';
     }
-    if (code == 13 || text.contains('permission denied')) {
+    if (code == 13 ||
+        text.contains('permission denied') ||
+        text.contains('eacces')) {
       return 'Android did not allow opening port $port. Try a port above '
           '1024.';
     }
