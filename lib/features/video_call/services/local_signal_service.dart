@@ -1084,7 +1084,7 @@ class LocalSignalService extends ChangeNotifier {
 
   String _describeBindError(SocketException error, int port) {
     final code = error.osError?.errorCode;
-    final text = '${error.message} ${error.osError?.message ?? ''}'
+    final text = '${error.message} ${error.osError?.message ?? ''} $error'
         .toLowerCase();
     if (code == 98 || text.contains('already in use')) {
       return 'Port $port is already in use. Choose another port or close '
