@@ -222,7 +222,7 @@ class LocalSignalService extends ChangeNotifier {
       if (run != _run) return;
       await _fail(_describeBindError(error, port));
     } catch (error) {
-      debugPrint('Starting host failed: ${error.runtimeType}');
+      debugPrint('Starting host failed: $error');
       if (run != _run) return;
       final description = error.toString().toLowerCase();
       if (description.contains('address already in use') ||
