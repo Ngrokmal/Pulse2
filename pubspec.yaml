@@ -1,0 +1,31 @@
+name: offline_video_call
+description: Two-way video and audio calls between two Android phones over a local Wi-Fi hotspot. No internet, account or cloud service.
+publish_to: 'none'
+version: 1.0.0+1
+
+environment:
+  sdk: ^3.9.0
+
+dependencies:
+  flutter:
+    sdk: flutter
+  # WebRTC peer connection, camera/microphone capture and video rendering.
+  flutter_webrtc: ^0.12.0
+  # Camera and microphone runtime permissions.
+  permission_handler: ^11.3.1
+  # HMAC for the pairing handshake.
+  crypto: ^3.0.3
+  # Shows the host's pairing QR code.
+  qr_flutter: ^4.1.0
+  # Scans the pairing QR code.
+  mobile_scanner: ^6.0.0
+  # Keeps the screen on while a call is connected.
+  wakelock_plus: ^1.2.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^5.0.0
+
+flutter:
+  uses-material-design: true

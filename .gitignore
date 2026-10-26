@@ -1,0 +1,15 @@
+# Build output and tooling
+# (pubspec.lock is intentionally committed)
+build/
+.dart_tool/
+.flutter-plugins
+.flutter-plugins-dependencies
+.packages
+
+# Signing material must never be committed
+key.properties
+android/key.properties
+*.jks
+*.keystore
+*.p12
+local.properties

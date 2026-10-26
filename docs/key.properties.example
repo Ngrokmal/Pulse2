@@ -1,0 +1,6 @@
+# Copy to android/key.properties (which is git-ignored) and fill in YOUR values.
+# Never commit the real file or the keystore it points to.
+storePassword=<your keystore password>
+keyPassword=<your key password>
+keyAlias=<your key alias>
+storeFile=<path to your .jks file, e.g. /home/you/keys/offline-video-call.jks>
